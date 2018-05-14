@@ -5,32 +5,43 @@ using System.Threading.Tasks;
 using System.Security.Cryptography;
 using System.IO;
 using System.Security.Cryptography.X509Certificates;
+using Org.BouncyCastle.OpenSsl;
+using Org.BouncyCastle.Crypto;
+using Org.BouncyCastle.Security;
+using Org.BouncyCastle.Crypto.Parameters;
+using System.Text;
 
 namespace AuthProvider.Crypto
 {
     public class RS256
     {
-        private readonly string KeyPath;
-        private X509Certificate2 x509;
+        private static RSACryptoServiceProvider rsa;
 
-        public RS256(string _keyPath)
-        {
-            KeyPath = _keyPath;
-            byte[] RawData = null; // here we gotta import the cert
-            x509 = new X509Certificate2();
-            x509.Import(RawData);
-
+        public static void Configure(string keyPath)
+        {  
+            PemReader pr = new PemReader(System.IO.File.OpenText(keyPath));
+            RsaPrivateCrtKeyParameters KeyPair = (RsaPrivateCrtKeyParameters)pr.ReadObject();
+            RSAParameters RSAParams = DotNetUtilities.ToRSAParameters(KeyPair);
+            rsa = new RSACryptoServiceProvider();
+            rsa.ImportParameters(RSAParams);
         }
-
-        public string Sign(byte [] message) //returns a base64 encoded signature
+        private static string BytesToStr(byte [] bytes)
         {
+            StringBuilder result = new StringBuilder(); 
+            for(int i =0; i < bytes.Length; i ++)
+            {
+                result.AppendFormat("{0:x2}",bytes[i]).Append(" ");
+            }
+            return result.ToString();
+        }
+        public static string Sign(byte [] message) //returns a base64 encoded signature
+        {
+            Logger.LogInfo("Generating signature for message: " + BytesToStr(message));
             RSACryptoServiceProvider rsa = new RSACryptoServiceProvider();
-            rsa.FromXmlString(x509.PrivateKey.ToXmlString(true)); 
-            return Convert.ToBase64String(rsa.SignData(message,CryptoConfig.MapNameToOID("SHA256"))); //MapNameToOID should return the algorithm
-            
+            byte [] Signature = rsa.SignData(message, CryptoConfig.MapNameToOID("SHA256"));
+            Logger.LogInfo("Generated signature: " + BytesToStr(Signature));
+            return Convert.ToBase64String(Signature);
         }
-        
-
 
     }
 }

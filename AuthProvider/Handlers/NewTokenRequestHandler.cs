@@ -45,12 +45,20 @@ namespace AuthProvider.Handlers
 
             };
 
-            string EncodedHeader = Convert.ToBase64String(Encoding.ASCII.GetBytes(HttpUtility.UrlEncode(JsonConvert.SerializeObject(Header))));
-            string EncodedPayload = Convert.ToBase64String(Encoding.ASCII.GetBytes(HttpUtility.UrlEncode(JsonConvert.SerializeObject(Payload))));
+            string EncodedHeader = Convert.ToBase64String(Encoding.ASCII.GetBytes(JsonConvert.SerializeObject(Header)));
+            string EncodedPayload = Convert.ToBase64String(Encoding.ASCII.GetBytes(JsonConvert.SerializeObject(Payload)));
             string Message = EncodedHeader + "." + EncodedPayload;
             //TODO: Put the file path in a config file somewhere
-            RS256 rs256 = new RS256("keys/private_key.pem");         
-            return Message + "." + rs256.Sign(Encoding.ASCII.GetBytes(Message));
+            try
+            {
+                
+                return Message + "." + RS256.Sign(Encoding.ASCII.GetBytes(Message));
+            }catch
+            {
+                return "fail!";
+
+            }
+            
         }
     }
 }
