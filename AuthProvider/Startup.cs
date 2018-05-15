@@ -59,7 +59,7 @@ namespace AuthProvider
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Login}/{action=Index}/{service?}");
+                    template: "{controller=Login}/{action=Login}/{service?}");
             });
 
         }

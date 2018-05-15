@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using AuthProvider.Requests;
 using AuthProvider.Models;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -17,7 +16,7 @@ namespace AuthProvider.Handlers
         private readonly string Username;
         private readonly string Password;
         private string Group;
-        public NewTokenRequestHandler(NewTokenRequest request)
+        public NewTokenRequestHandler(Models.Requests.NewToken request)
         {
             Username = request.Username;
             Password = request.Password;

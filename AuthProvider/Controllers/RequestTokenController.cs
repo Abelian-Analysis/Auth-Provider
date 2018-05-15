@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using AuthProvider.Requests;
 using AuthProvider.Models;
 using AuthProvider.Handlers;
 
@@ -17,7 +16,7 @@ namespace AuthProvider.Controllers
         [HttpGet]
         public string Get()
         {
-            NewTokenRequestHandler handler = new NewTokenRequestHandler(new NewTokenRequest {
+            NewTokenRequestHandler handler = new NewTokenRequestHandler(new Models.Requests.NewToken {
                 Username = "kablaa",
                 Password = "password",
             });

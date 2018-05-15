@@ -1,0 +1,35 @@
+﻿
+@{ 
+    ViewData["Title"] = "Login";
+    var Service = ViewData["service"];
+    var Error = ViewData["error"];
+    string ErrorMessage = null;
+    if(Error != null)
+    {
+        switch (Error.ToString())
+        {
+            case "LoginFailed":
+                ErrorMessage = "Login Failed";
+                break;
+            default:
+                break;
+
+        }
+    }
+
+}
+
+<h2>Login</h2>
+<form action="/" method="post">
+    <input type="Hidden" name="service" value=@Service /><br />
+    Username: <input type="text" name="Username" value="" /><br /><br />
+    Password:  <input type="password" name="Password" value="" /><br /><br />
+    <input type="Submit" value="Login" />
+    @{ 
+        if(ErrorMessage != null)
+        {
+           @:<p style='color:red'>@Error</p>
+        }
+        
+    }
+</form>
