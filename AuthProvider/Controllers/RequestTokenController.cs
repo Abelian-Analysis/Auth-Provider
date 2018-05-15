@@ -10,7 +10,7 @@ using AuthProvider.Handlers;
 
 namespace AuthProvider.Controllers
 {
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class RequestTokenController : Controller
     {
         // GET api/values
