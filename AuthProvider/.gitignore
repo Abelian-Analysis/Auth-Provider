@@ -1,1 +1,3 @@
 logfile.txt
+*.pem
+*.crt
