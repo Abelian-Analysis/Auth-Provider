@@ -18,7 +18,8 @@ namespace AuthProvider.Crypto
         private static RSACryptoServiceProvider rsa;
 
         public static void Configure(string keyPath)
-        {  
+        {
+            Logger.LogInfo("Reading Private key from: " + keyPath);
             PemReader pr = new PemReader(System.IO.File.OpenText(keyPath));
             RsaPrivateCrtKeyParameters KeyPair = (RsaPrivateCrtKeyParameters)pr.ReadObject();
             RSAParameters RSAParams = DotNetUtilities.ToRSAParameters(KeyPair);
